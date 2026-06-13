@@ -296,78 +296,113 @@ const database = firebase.database();
 };
 
 const MATCHES = [
-  {id: 'w26_a1', h: 'Meksika', a: 'Güney Afrika', g: 'A Grubu', d: '2026-06-11', t: '20:00'},
-  {id: 'w26_a2', h: 'Güney Kore', a: 'Çekya', g: 'A Grubu', d: '2026-06-11', t: '23:00'},
-  {id: 'w26_b1', h: 'Kanada', a: 'Bosna-Hersek', g: 'B Grubu', d: '2026-06-12', t: '19:00'},
-  {id: 'w26_c2', h: 'Haiti', a: 'İskoçya', g: 'C Grubu', d: '2026-06-13', t: '00:00'},
-  {id: 'w26_d1', h: 'ABD', a: 'Paraguay', g: 'D Grubu', d: '2026-06-13', t: '00:00'},
-  {id: 'w26_b2', h: 'Katar', a: 'İsviçre', g: 'B Grubu', d: '2026-06-13', t: '18:00'},
-  {id: 'w26_c1', h: 'Brezilya', a: 'Fas', g: 'C Grubu', d: '2026-06-13', t: '21:00'},
-  {id: 'w26_d2', h: 'Avustralya', a: 'Türkiye', g: 'D Grubu', d: '2026-06-14', t: '07:00'},
-  {id: 'w26_h1', h: 'İspanya', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-14', t: '14:00'},
-  {id: 'w26_e1', h: 'Almanya', a: 'Ekvador', g: 'E Grubu', d: '2026-06-14', t: '15:00'},
-  {id: 'w26_f1', h: 'Hollanda', a: 'Japonya', g: 'F Grubu', d: '2026-06-14', t: '18:00'},
-  {id: 'w26_e2', h: 'Fildişi Sahili', a: 'Curaçao', g: 'E Grubu', d: '2026-06-14', t: '21:00'},
-  {id: 'w26_a3', h: 'Meksika', a: 'Güney Kore', g: 'A Grubu', d: '2026-06-15', t: '15:00'},
-  {id: 'w26_g1', h: 'Belçika', a: 'Mısır', g: 'G Grubu', d: '2026-06-15', t: '16:00'},
-  {id: 'w26_a4', h: 'Güney Afrika', a: 'Çekya', g: 'A Grubu', d: '2026-06-15', t: '18:00'},
-  {id: 'w26_h2', h: 'Suudi Arabistan', a: 'Uruguay', g: 'H Grubu', d: '2026-06-15', t: '18:00'},
-  {id: 'w26_f2', h: 'İsveç', a: 'Tunus', g: 'F Grubu', d: '2026-06-15', t: '19:00'},
-  {id: 'w26_g2', h: 'İran', a: 'Yeni Zelanda', g: 'G Grubu', d: '2026-06-15', t: '22:00'},
-  {id: 'w26_i2', h: 'Irak', a: 'Norveç', g: 'I Grubu', d: '2026-06-16', t: '16:00'},
-  {id: 'w26_j1', h: 'Arjantin', a: 'Cezayir', g: 'J Grubu', d: '2026-06-16', t: '18:00'},
-  {id: 'w26_i1', h: 'Fransa', a: 'Senegal', g: 'I Grubu', d: '2026-06-16', t: '21:00'},
-  {id: 'w26_j2', h: 'Avusturya', a: 'Ürdün', g: 'J Grubu', d: '2026-06-16', t: '22:00'},
-  {id: 'w26_l2', h: 'Gana', a: 'Panama', g: 'L Grubu', d: '2026-06-17', t: '17:00'},
-  {id: 'w26_b3', h: 'Kanada', a: 'Katar', g: 'B Grubu', d: '2026-06-17', t: '20:00'},
-  {id: 'w26_k1', h: 'Portekiz', a: 'Kongo DR', g: 'K Grubu', d: '2026-06-17', t: '19:00'},
-  {id: 'w26_l1', h: 'İngiltere', a: 'Hırvatistan', g: 'L Grubu', d: '2026-06-17', t: '21:00'},
-  {id: 'w26_k2', h: 'Özbekistan', a: 'Kolombiya', g: 'K Grubu', d: '2026-06-17', t: '22:00'},
-  {id: 'w26_b4', h: 'İsviçre', a: 'Bosna-Hersek', g: 'B Grubu', d: '2026-06-17', t: '23:00'},
-  {id: 'w26_c3', h: 'Brezilya', a: 'Haiti', g: 'C Grubu', d: '2026-06-18', t: '16:00'},
-  {id: 'w26_d3', h: 'ABD', a: 'Avustralya', g: 'D Grubu', d: '2026-06-18', t: '19:00'},
-  {id: 'w26_c4', h: 'İskoçya', a: 'Fas', g: 'C Grubu', d: '2026-06-18', t: '22:00'},
-  {id: 'w26_d4', h: 'Türkiye', a: 'Paraguay', g: 'D Grubu', d: '2026-06-19', t: '06:00'},
-  {id: 'w26_f3', h: 'Hollanda', a: 'İsveç', g: 'F Grubu', d: '2026-06-19', t: '18:00'},
-  {id: 'w26_e3', h: 'Almanya', a: 'Fildişi Sahili', g: 'E Grubu', d: '2026-06-19', t: '19:00'},
-  {id: 'w26_a5', h: 'Meksika', a: 'Çekya', g: 'A Grubu', d: '2026-06-19', t: '22:00'},
-  {id: 'w26_a6', h: 'Güney Afrika', a: 'Güney Kore', g: 'A Grubu', d: '2026-06-19', t: '22:00'},
-  {id: 'w26_e4', h: 'Ekvador', a: 'Curaçao', g: 'E Grubu', d: '2026-06-19', t: '22:00'},
-  {id: 'w26_h3', h: 'İspanya', a: 'Suudi Arabistan', g: 'H Grubu', d: '2026-06-20', t: '17:00'},
-  {id: 'w26_g3', h: 'Belçika', a: 'İran', g: 'G Grubu', d: '2026-06-20', t: '18:00'},
-  {id: 'w26_h4', h: 'Uruguay', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-20', t: '20:00'},
-  {id: 'w26_g4', h: 'Mısır', a: 'Yeni Zelanda', g: 'G Grubu', d: '2026-06-20', t: '21:00'},
-  {id: 'w26_f4', h: 'Japonya', a: 'Tunus', g: 'F Grubu', d: '2026-06-20', t: '22:00'},
-  {id: 'w26_j3', h: 'Arjantin', a: 'Avusturya', g: 'J Grubu', d: '2026-06-21', t: '17:00'},
-  {id: 'w26_i3', h: 'Fransa', a: 'Irak', g: 'I Grubu', d: '2026-06-21', t: '19:00'},
-  {id: 'w26_j4', h: 'Cezayir', a: 'Ürdün', g: 'J Grubu', d: '2026-06-21', t: '20:00'},
-  {id: 'w26_b5', h: 'Kanada', a: 'İsviçre', g: 'B Grubu', d: '2026-06-21', t: '22:00'},
-  {id: 'w26_b6', h: 'Bosna-Hersek', a: 'Katar', g: 'B Grubu', d: '2026-06-21', t: '22:00'},
-  {id: 'w26_i4', h: 'Norveç', a: 'Senegal', g: 'I Grubu', d: '2026-06-21', t: '22:00'},
-  {id: 'w26_k3', h: 'Portekiz', a: 'Özbekistan', g: 'K Grubu', d: '2026-06-22', t: '16:00'},
-  {id: 'w26_k4', h: 'Kongo DR', a: 'Kolombiya', g: 'K Grubu', d: '2026-06-22', t: '21:00'},
-  {id: 'w26_c5', h: 'Brezilya', a: 'İskoçya', g: 'C Grubu', d: '2026-06-22', t: '22:00'},
-  {id: 'w26_c6', h: 'Fas', a: 'Haiti', g: 'C Grubu', d: '2026-06-22', t: '22:00'},
-  {id: 'w26_l3', h: 'İngiltere', a: 'Gana', g: 'L Grubu', d: '2026-06-23', t: '16:00'},
-  {id: 'w26_l4', h: 'Hırvatistan', a: 'Panama', g: 'L Grubu', d: '2026-06-23', t: '19:00'},
-  {id: 'w26_e5', h: 'Almanya', a: 'Curaçao', g: 'E Grubu', d: '2026-06-23', t: '22:00'},
-  {id: 'w26_e6', h: 'Fildişi Sahili', a: 'Ekvador', g: 'E Grubu', d: '2026-06-23', t: '22:00'},
-  {id: 'w26_h5', h: 'İspanya', a: 'Uruguay', g: 'H Grubu', d: '2026-06-24', t: '16:00'},
-  {id: 'w26_h6', h: 'Suudi Arabistan', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-24', t: '16:00'},
-  {id: 'w26_g5', h: 'Belçika', a: 'Yeni Zelanda', g: 'G Grubu', d: '2026-06-24', t: '19:00'},
-  {id: 'w26_g6', h: 'İran', a: 'Mısır', g: 'G Grubu', d: '2026-06-24', t: '19:00'},
-  {id: 'w26_f5', h: 'Hollanda', a: 'Tunus', g: 'F Grubu', d: '2026-06-24', t: '22:00'},
-  {id: 'w26_f6', h: 'Japonya', a: 'İsveç', g: 'F Grubu', d: '2026-06-24', t: '22:00'},
-  {id: 'w26_j5', h: 'Arjantin', a: 'Ürdün', g: 'J Grubu', d: '2026-06-25', t: '19:00'},
-  {id: 'w26_j6', h: 'Cezayir', a: 'Avusturya', g: 'J Grubu', d: '2026-06-25', t: '19:00'},
-  {id: 'w26_i5', h: 'Fransa', a: 'Norveç', g: 'I Grubu', d: '2026-06-25', t: '22:00'},
-  {id: 'w26_i6', h: 'Senegal', a: 'Irak', g: 'I Grubu', d: '2026-06-25', t: '22:00'},
-  {id: 'w26_d5', h: 'ABD', a: 'Türkiye', g: 'D Grubu', d: '2026-06-26', t: '05:00'},
-  {id: 'w26_k5', h: 'Portekiz', a: 'Kolombiya', g: 'K Grubu', d: '2026-06-26', t: '17:00'},
-  {id: 'w26_k6', h: 'Kongo DR', a: 'Özbekistan', g: 'K Grubu', d: '2026-06-26', t: '17:00'},
-  {id: 'w26_d6', h: 'Paraguay', a: 'Avustralya', g: 'D Grubu', d: '2026-06-26', t: '22:00'},
-  {id: 'w26_l5', h: 'İngiltere', a: 'Panama', g: 'L Grubu', d: '2026-06-27', t: '22:00'},
-  {id: 'w26_l6', h: 'Hırvatistan', a: 'Gana', g: 'L Grubu', d: '2026-06-27', t: '22:00'}
+  // 11 Haziran Perşembe
+  {id: 'w26_001', h: 'Meksika', a: 'Güney Afrika', g: 'A Grubu', d: '2026-06-11', t: '22:00'},
+
+  // 12 Haziran Cuma
+  {id: 'w26_002', h: 'Güney Kore', a: 'Çekya', g: 'A Grubu', d: '2026-06-12', t: '05:00'},
+  {id: 'w26_003', h: 'Kanada', a: 'Bosna-Hersek', g: 'B Grubu', d: '2026-06-12', t: '22:00'},
+
+  // 13 Haziran Cumartesi
+  {id: 'w26_004', h: 'ABD', a: 'Paraguay', g: 'D Grubu', d: '2026-06-13', t: '04:00'},
+  {id: 'w26_005', h: 'Katar', a: 'İsviçre', g: 'B Grubu', d: '2026-06-13', t: '22:00'},
+
+  // 14 Haziran Pazar
+  {id: 'w26_006', h: 'Brezilya', a: 'Fas', g: 'C Grubu', d: '2026-06-14', t: '01:00'},
+  {id: 'w26_007', h: 'Haiti', a: 'İskoçya', g: 'C Grubu', d: '2026-06-14', t: '04:00'},
+  {id: 'w26_008', h: 'Avustralya', a: 'Türkiye', g: 'D Grubu', d: '2026-06-14', t: '07:00'},
+  {id: 'w26_009', h: 'Almanya', a: 'Curaçao', g: 'E Grubu', d: '2026-06-14', t: '20:00'},
+  {id: 'w26_010', h: 'Hollanda', a: 'Japonya', g: 'F Grubu', d: '2026-06-14', t: '23:00'},
+
+  // 15 Haziran Pazartesi
+  {id: 'w26_011', h: 'Fildişi Sahili', a: 'Ekvador', g: 'E Grubu', d: '2026-06-15', t: '02:00'},
+  {id: 'w26_012', h: 'İsveç', a: 'Tunus', g: 'F Grubu', d: '2026-06-15', t: '05:00'},
+  {id: 'w26_013', h: 'İspanya', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-15', t: '19:00'},
+  {id: 'w26_014', h: 'Belçika', a: 'Mısır', g: 'G Grubu', d: '2026-06-15', t: '22:00'},
+
+  // 16 Haziran Salı
+  {id: 'w26_015', h: 'Suudi Arabistan', a: 'Uruguay', g: 'H Grubu', d: '2026-06-16', t: '01:00'},
+  {id: 'w26_016', h: 'İran', a: 'Yeni Zelanda', g: 'G Grubu', d: '2026-06-16', t: '04:00'},
+  {id: 'w26_017', h: 'Fransa', a: 'Senegal', g: 'I Grubu', d: '2026-06-16', t: '22:00'},
+
+  // 17 Haziran Çarşamba
+  {id: 'w26_018', h: 'Irak', a: 'Norveç', g: 'I Grubu', d: '2026-06-17', t: '01:00'},
+  {id: 'w26_019', h: 'Arjantin', a: 'Cezayir', g: 'J Grubu', d: '2026-06-17', t: '04:00'},
+  {id: 'w26_020', h: 'Avusturya', a: 'Ürdün', g: 'J Grubu', d: '2026-06-17', t: '07:00'},
+  {id: 'w26_021', h: 'Portekiz', a: 'Kongo DR', g: 'K Grubu', d: '2026-06-17', t: '20:00'},
+  {id: 'w26_022', h: 'İngiltere', a: 'Hırvatistan', g: 'L Grubu', d: '2026-06-17', t: '23:00'},
+
+  // 18 Haziran Perşembe
+  {id: 'w26_023', h: 'Gana', a: 'Panama', g: 'L Grubu', d: '2026-06-18', t: '02:00'},
+  {id: 'w26_024', h: 'Özbekistan', a: 'Kolombiya', g: 'K Grubu', d: '2026-06-18', t: '05:00'},
+  {id: 'w26_025', h: 'Çekya', a: 'Güney Afrika', g: 'A Grubu', d: '2026-06-18', t: '19:00'},
+  {id: 'w26_026', h: 'İsviçre', a: 'Bosna-Hersek', g: 'B Grubu', d: '2026-06-18', t: '22:00'},
+
+  // 19 Haziran Cuma
+  {id: 'w26_027', h: 'Kanada', a: 'Katar', g: 'B Grubu', d: '2026-06-19', t: '01:00'},
+  {id: 'w26_028', h: 'Meksika', a: 'Güney Kore', g: 'A Grubu', d: '2026-06-19', t: '04:00'},
+  {id: 'w26_029', h: 'ABD', a: 'Avustralya', g: 'D Grubu', d: '2026-06-19', t: '22:00'},
+
+  // 20 Haziran Cumartesi
+  {id: 'w26_030', h: 'İskoçya', a: 'Fas', g: 'C Grubu', d: '2026-06-20', t: '01:00'},
+  {id: 'w26_031', h: 'Brezilya', a: 'Haiti', g: 'C Grubu', d: '2026-06-20', t: '03:30'},
+  {id: 'w26_032', h: 'Türkiye', a: 'Paraguay', g: 'D Grubu', d: '2026-06-20', t: '06:00'},
+  {id: 'w26_033', h: 'Hollanda', a: 'İsveç', g: 'F Grubu', d: '2026-06-20', t: '20:00'},
+  {id: 'w26_034', h: 'Almanya', a: 'Fildişi Sahili', g: 'E Grubu', d: '2026-06-20', t: '23:00'},
+
+  // 21 Haziran Pazar
+  {id: 'w26_035', h: 'Ekvador', a: 'Curaçao', g: 'E Grubu', d: '2026-06-21', t: '03:00'},
+  {id: 'w26_036', h: 'Tunus', a: 'Japonya', g: 'F Grubu', d: '2026-06-21', t: '07:00'},
+  {id: 'w26_037', h: 'İspanya', a: 'Suudi Arabistan', g: 'H Grubu', d: '2026-06-21', t: '19:00'},
+  {id: 'w26_038', h: 'Belçika', a: 'İran', g: 'G Grubu', d: '2026-06-21', t: '22:00'},
+
+  // 22 Haziran Pazartesi
+  {id: 'w26_039', h: 'Uruguay', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-22', t: '01:00'},
+  {id: 'w26_040', h: 'Yeni Zelanda', a: 'Mısır', g: 'G Grubu', d: '2026-06-22', t: '04:00'},
+  {id: 'w26_041', h: 'Arjantin', a: 'Avusturya', g: 'J Grubu', d: '2026-06-22', t: '20:00'},
+
+  // 23 Haziran Salı
+  {id: 'w26_042', h: 'Fransa', a: 'Irak', g: 'I Grubu', d: '2026-06-23', t: '00:00'},
+  {id: 'w26_043', h: 'Norveç', a: 'Senegal', g: 'I Grubu', d: '2026-06-23', t: '03:00'},
+  {id: 'w26_044', h: 'Ürdün', a: 'Cezayir', g: 'J Grubu', d: '2026-06-23', t: '06:00'},
+  {id: 'w26_045', h: 'Portekiz', a: 'Özbekistan', g: 'K Grubu', d: '2026-06-23', t: '20:00'},
+  {id: 'w26_046', h: 'İngiltere', a: 'Gana', g: 'L Grubu', d: '2026-06-23', t: '23:00'},
+
+  // 24 Haziran Çarşamba
+  {id: 'w26_047', h: 'Panama', a: 'Hırvatistan', g: 'L Grubu', d: '2026-06-24', t: '02:00'},
+  {id: 'w26_048', h: 'Kolombiya', a: 'Kongo DR', g: 'K Grubu', d: '2026-06-24', t: '05:00'},
+  {id: 'w26_049', h: 'İsviçre', a: 'Kanada', g: 'B Grubu', d: '2026-06-24', t: '22:00'},
+  {id: 'w26_050', h: 'Bosna-Hersek', a: 'Katar', g: 'B Grubu', d: '2026-06-24', t: '22:00'},
+
+  // 25 Haziran Perşembe
+  {id: 'w26_051', h: 'İskoçya', a: 'Brezilya', g: 'C Grubu', d: '2026-06-25', t: '01:00'},
+  {id: 'w26_052', h: 'Fas', a: 'Haiti', g: 'C Grubu', d: '2026-06-25', t: '01:00'},
+  {id: 'w26_053', h: 'Çekya', a: 'Meksika', g: 'A Grubu', d: '2026-06-25', t: '04:00'},
+  {id: 'w26_054', h: 'Güney Afrika', a: 'Güney Kore', g: 'A Grubu', d: '2026-06-25', t: '04:00'},
+  {id: 'w26_055', h: 'Curaçao', a: 'Fildişi Sahili', g: 'E Grubu', d: '2026-06-25', t: '23:00'},
+  {id: 'w26_056', h: 'Ekvador', a: 'Almanya', g: 'E Grubu', d: '2026-06-25', t: '23:00'},
+
+  // 26 Haziran Cuma
+  {id: 'w26_057', h: 'Japonya', a: 'İsveç', g: 'F Grubu', d: '2026-06-26', t: '02:00'},
+  {id: 'w26_058', h: 'Tunus', a: 'Hollanda', g: 'F Grubu', d: '2026-06-26', t: '02:00'},
+  {id: 'w26_059', h: 'Türkiye', a: 'ABD', g: 'D Grubu', d: '2026-06-26', t: '05:00'},
+  {id: 'w26_060', h: 'Paraguay', a: 'Avustralya', g: 'D Grubu', d: '2026-06-26', t: '05:00'},
+  {id: 'w26_061', h: 'Norveç', a: 'Fransa', g: 'I Grubu', d: '2026-06-26', t: '22:00'},
+  {id: 'w26_062', h: 'Senegal', a: 'Irak', g: 'I Grubu', d: '2026-06-26', t: '22:00'},
+
+  // 27 Haziran Cumartesi
+  {id: 'w26_063', h: 'Yeşil Burun Adaları', a: 'Suudi Arabistan', g: 'H Grubu', d: '2026-06-27', t: '03:00'},
+  {id: 'w26_064', h: 'Uruguay', a: 'İspanya', g: 'H Grubu', d: '2026-06-27', t: '03:00'},
+  {id: 'w26_065', h: 'Mısır', a: 'İran', g: 'G Grubu', d: '2026-06-27', t: '06:00'},
+  {id: 'w26_066', h: 'Yeni Zelanda', a: 'Belçika', g: 'G Grubu', d: '2026-06-27', t: '06:00'},
+
+  // 28 Haziran Pazar
+  {id: 'w26_067', h: 'Panama', a: 'İngiltere', g: 'L Grubu', d: '2026-06-28', t: '00:00'},
+  {id: 'w26_068', h: 'Hırvatistan', a: 'Gana', g: 'L Grubu', d: '2026-06-28', t: '00:00'},
+  {id: 'w26_069', h: 'Kolombiya', a: 'Portekiz', g: 'K Grubu', d: '2026-06-28', t: '02:30'},
+  {id: 'w26_070', h: 'Kongo DR', a: 'Özbekistan', g: 'K Grubu', d: '2026-06-28', t: '02:30'},
+  {id: 'w26_071', h: 'Cezayir', a: 'Avusturya', g: 'J Grubu', d: '2026-06-28', t: '05:00'},
+  {id: 'w26_072', h: 'Ürdün', a: 'Arjantin', g: 'J Grubu', d: '2026-06-28', t: '05:00'}
 ];
 /* =========================================================
    STATE

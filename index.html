@@ -280,21 +280,20 @@ const database = firebase.database();
 /* =========================================================
    STATİK VERİLER
    ========================================================= */
-const TEAM_FLAGS = {
-  // --- GRUPTAKİ ÜLKELER ---
-  "Meksika": "🇲🇽", "Kanada": "🇨🇦", "Venezuela": "🇻🇪", "Honduras": "🇭🇳",
-  "Arjantin": "🇦🇷", "Ekvador": "🇪🇨", "Uruguay": "🇺🇾", "Şili": "🇨🇱",
-  "Brezilya": "🇧🇷", "Kolombiya": "🇨🇴", "Paraguay": "🇵🇾", "Peru": "🇵🇪",
-  "ABD": "🇺🇸", "Jamaika": "🇯🇲", "Kosta Rika": "🇨🇷", "Panama": "🇵🇦",
-  "Fransa": "🇫🇷", "Avusturya": "🇦🇹", "Hollanda": "🇳🇱", "Polonya": "🇵🇱",
-  "İngiltere": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "Danimarka": "🇩🇰", "Sırbistan": "🇷🇸", "Slovenya": "🇸🇮",
-  "İspanya": "🇪🇸", "Hırvatistan": "🇭🇷", "İtalya": "🇮🇹", "Arnavutluk": "🇦🇱",
-  "Almanya": "🇩🇪", "İskoçya": "🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Macaristan": "🇭🇺", "İsviçre": "🇨🇭",
-  "Portekiz": "🇵🇹", "Türkiye": "🇹🇷", "Çekya": "🇨🇿", "Gürcistan": "🇬🇪",
-  "Belçika": "🇧🇪", "Romanya": "🇷🇴", "Slovakya": "🇸🇰", "Ukrayna": "🇺🇦",
-  "Fas": "🇲🇦", "Zambiya": "🇿🇲", "Kongo": "🇨🇬", "Nijer": "🇳🇪",
-  "Japonya": "🇯🇵", "Avustralya": "🇦🇺", "Güney Kore": "🇰🇷", "Suudi Arabistan": "🇸🇦",
-};
+   const TEAM_FLAGS = {
+      'Meksika': '🇲🇽', 'Güney Afrika': '🇿🇦', 'Güney Kore': '🇰🇷', 'Çekya': '🇨🇿',
+      'Kanada': '🇨🇦', 'Bosna-Hersek': '🇧🇦', 'Katar': '🇶🇦', 'İsviçre': '🇨🇭',
+      'Brezilya': '🇧🇷', 'Fas': '🇲🇦', 'Haiti': '🇭🇹', 'İskoçya': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'ABD': '🇺🇸',
+      'Paraguay': '🇵🇾', 'Avustralya': '🇦🇺', 'Türkiye': '🇹🇷', 'Almanya': '🇩🇪',
+      'Ekvador': '🇪🇨', 'Fildişi Sahili': '🇨🇮', 'Curaçao': '🇨🇼', 'Hollanda': '🇳🇱',
+      'Japonya': '🇯🇵', 'İsveç': '🇸🇪', 'Tunus': '🇹🇳', 'Belçika': '🇧🇪',
+      'Mısır': '🇪🇬', 'İran': '🇮🇷', 'Yeni Zelanda': '🇳🇿', 'İspanya': '🇪🇸',
+      'Yeşil Burun Adaları': '🇨🇻', 'Suudi Arabistan': '🇸🇦', 'Uruguay': '🇺🇾',
+      'Fransa': '🇫🇷', 'Senegal': '🇸🇳', 'Irak': '🇮🇶', 'Norveç': '🇳🇴',
+      'Arjantin': '🇦🇷', 'Cezayir': '🇩🇿', 'Avusturya': '🇦🇹', 'Ürdün': '🇯🇴',
+      'Portekiz': '🇵🇹', 'Kongo DR': '🇨🇩', 'Özbekistan': '🇺🇿', 'Kolombiya': '🇨🇴',
+      'İngiltere': '🇬🇧', 'Hırvatistan': '🇭🇷', 'Gana': '🇬🇭', 'Panama': '🇵🇦'
+    };
 
  const MATCHES = [
       {id: 'a1', h: 'Meksika', a: 'Güney Afrika', g: 'A', d: '11 Haz', t: '20:00'},

@@ -280,95 +280,118 @@ const database = firebase.database();
 /* =========================================================
    STATİK VERİLER
    ========================================================= */
-   const TEAM_FLAGS = {
-      'Meksika': '🇲🇽', 'Güney Afrika': '🇿🇦', 'Güney Kore': '🇰🇷', 'Çekya': '🇨🇿',
-      'Kanada': '🇨🇦', 'Bosna-Hersek': '🇧🇦', 'Katar': '🇶🇦', 'İsviçre': '🇨🇭',
-      'Brezilya': '🇧🇷', 'Fas': '🇲🇦', 'Haiti': '🇭🇹', 'İskoçya': '🏴󠁧󠁢󠁳󠁣󠁴󠁿', 'ABD': '🇺🇸',
-      'Paraguay': '🇵🇾', 'Avustralya': '🇦🇺', 'Türkiye': '🇹🇷', 'Almanya': '🇩🇪',
-      'Ekvador': '🇪🇨', 'Fildişi Sahili': '🇨🇮', 'Curaçao': '🇨🇼', 'Hollanda': '🇳🇱',
-      'Japonya': '🇯🇵', 'İsveç': '🇸🇪', 'Tunus': '🇹🇳', 'Belçika': '🇧🇪',
-      'Mısır': '🇪🇬', 'İran': '🇮🇷', 'Yeni Zelanda': '🇳🇿', 'İspanya': '🇪🇸',
-      'Yeşil Burun Adaları': '🇨🇻', 'Suudi Arabistan': '🇸🇦', 'Uruguay': '🇺🇾',
-      'Fransa': '🇫🇷', 'Senegal': '🇸🇳', 'Irak': '🇮🇶', 'Norveç': '🇳🇴',
-      'Arjantin': '🇦🇷', 'Cezayir': '🇩🇿', 'Avusturya': '🇦🇹', 'Ürdün': '🇯🇴',
-      'Portekiz': '🇵🇹', 'Kongo DR': '🇨🇩', 'Özbekistan': '🇺🇿', 'Kolombiya': '🇨🇴',
-      'İngiltere': '🇬🇧', 'Hırvatistan': '🇭🇷', 'Gana': '🇬🇭', 'Panama': '🇵🇦'
-    };
+  const TEAM_FLAGS = {
+  "Meksika": "🇲🇽", "Güney Afrika": "🇿🇦", "Güney Kore": "🇰🇷", "Çekya": "🇨🇿",
+  "Kanada": "🇨🇦", "Bosna-Hersek": "🇧🇦", "Katar": "🇶🇦", "İsviçre": "🇨🇭",
+  "Brezilya": "🇧🇷", "Fas": "🇲🇦", "Haiti": "🇭🇹", "İskoçya": "🏴...🏴",
+  "ABD": "🇺🇸", "Paraguay": "🇵🇾", "Avustralya": "🇦🇺", "Türkiye": "🇹🇷",
+  "Almanya": "🇩🇪", "Ekvador": "🇪🇨", "Fildişi Sahili": "🇨🇮", "Curaçao": "🇨🇼",
+  "Hollanda": "🇳🇱", "Japonya": "🇯🇵", "İsveç": "🇸🇪", "Tunus": "🇹🇳",
+  "Belçika": "🇧🇪", "Mısır": "🇪🇬", "İran": "🇮🇷", "Yeni Zelanda": "🇳🇿",
+  "İspanya": "🇪🇸", "Yeşil Burun Adaları": "🇨🇻", "Suudi Arabistan": "🇸🇦", "Uruguay": "🇺🇾",
+  "Fransa": "🇫🇷", "Senegal": "🇸🇳", "Irak": "🇮🇶", "Norveç": "🇳🇴",
+  "Arjantin": "🇦🇷", "Cezayir": "🇩🇿", "Avusturya": "🇦🇹", "Ürdün": "🇯🇴",
+  "Portekiz": "🇵🇹", "Kongo DR": "🇨🇩", "Özbekistan": "🇺🇿", "Kolombiya": "🇨🇴",
+  "İngiltere": "🏴...🏴", "Hırvatistan": "🇭🇷", "Gana": "🇬🇭", "Panama": "🇵🇦"
+};
 
- const MATCHES = [
-      {id: 'a1', h: 'Meksika', a: 'Güney Afrika', g: 'A', d: '11 Haz', t: '20:00'},
-      {id: 'a2', h: 'Güney Kore', a: 'Çekya', g: 'A', d: '11 Haz', t: '23:00'},
-      {id: 'a3', h: 'Meksika', a: 'Güney Kore', g: 'A', d: '15 Haz', t: '15:00'},
-      {id: 'a4', h: 'Güney Afrika', a: 'Çekya', g: 'A', d: '15 Haz', t: '18:00'},
-      {id: 'a5', h: 'Meksika', a: 'Çekya', g: 'A', d: '19 Haz', t: '22:00'},
-      {id: 'a6', h: 'Güney Afrika', a: 'Güney Kore', g: 'A', d: '19 Haz', t: '22:00'},
-      {id: 'b1', h: 'Kanada', a: 'Bosna-Hersek', g: 'B', d: '12 Haz', t: '19:00'},
-      {id: 'b2', h: 'Katar', a: 'İsviçre', g: 'B', d: '13 Haz', t: '18:00'},
-      {id: 'b3', h: 'Kanada', a: 'Katar', g: 'B', d: '17 Haz', t: '20:00'},
-      {id: 'b4', h: 'İsviçre', a: 'Bosna-Hersek', g: 'B', d: '17 Haz', t: '23:00'},
-      {id: 'b5', h: 'Kanada', a: 'İsviçre', g: 'B', d: '21 Haz', t: '22:00'},
-      {id: 'b6', h: 'Bosna-Hersek', a: 'Katar', g: 'B', d: '21 Haz', t: '22:00'},
-      {id: 'c1', h: 'Brezilya', a: 'Fas', g: 'C', d: '13 Haz', t: '21:00'},
-      {id: 'c2', h: 'Haiti', a: 'İskoçya', g: 'C', d: '13 Haz', t: '00:00'},
-      {id: 'c3', h: 'Brezilya', a: 'Haiti', g: 'C', d: '18 Haz', t: '16:00'},
-      {id: 'c4', h: 'İskoçya', a: 'Fas', g: 'C', d: '18 Haz', t: '22:00'},
-      {id: 'c5', h: 'Brezilya', a: 'İskoçya', g: 'C', d: '22 Haz', t: '22:00'},
-      {id: 'c6', h: 'Fas', a: 'Haiti', g: 'C', d: '22 Haz', t: '22:00'},
-      {id: 'd1', h: 'ABD', a: 'Paraguay', g: 'D', d: '13 Haz', t: '00:00'},
-      {id: 'd2', h: 'Avustralya', a: 'Türkiye', g: 'D', d: '14 Haz', t: '07:00'},
-      {id: 'd3', h: 'ABD', a: 'Avustralya', g: 'D', d: '18 Haz', t: '19:00'},
-      {id: 'd4', h: 'Türkiye', a: 'Paraguay', g: 'D', d: '19 Haz', t: '06:00'},
-      {id: 'd5', h: 'ABD', a: 'Türkiye', g: 'D', d: '26 Haz', t: '05:00'},
-      {id: 'd6', h: 'Paraguay', a: 'Avustralya', g: 'D', d: '26 Haz', t: '22:00'},
-      {id: 'e1', h: 'Almanya', a: 'Ekvador', g: 'E', d: '14 Haz', t: '15:00'},
-      {id: 'e2', h: 'Fildişi Sahili', a: 'Curaçao', g: 'E', d: '14 Haz', t: '21:00'},
-      {id: 'e3', h: 'Almanya', a: 'Fildişi Sahili', g: 'E', d: '19 Haz', t: '19:00'},
-      {id: 'e4', h: 'Ekvador', a: 'Curaçao', g: 'E', d: '19 Haz', t: '22:00'},
-      {id: 'e5', h: 'Almanya', a: 'Curaçao', g: 'E', d: '23 Haz', t: '22:00'},
-      {id: 'e6', h: 'Fildişi Sahili', a: 'Ekvador', g: 'E', d: '23 Haz', t: '22:00'},
-      {id: 'f1', h: 'Hollanda', a: 'Japonya', g: 'F', d: '14 Haz', t: '18:00'},
-      {id: 'f2', h: 'İsveç', a: 'Tunus', g: 'F', d: '15 Haz', t: '19:00'},
-      {id: 'f3', h: 'Hollanda', a: 'İsveç', g: 'F', d: '19 Haz', t: '18:00'},
-      {id: 'f4', h: 'Japonya', a: 'Tunus', g: 'F', d: '20 Haz', t: '22:00'},
-      {id: 'f5', h: 'Hollanda', a: 'Tunus', g: 'F', d: '24 Haz', t: '22:00'},
-      {id: 'f6', h: 'Japonya', a: 'İsveç', g: 'F', d: '24 Haz', t: '22:00'},
-      {id: 'g1', h: 'Belçika', a: 'Mısır', g: 'G', d: '15 Haz', t: '16:00'},
-      {id: 'g2', h: 'İran', a: 'Yeni Zelanda', g: 'G', d: '15 Haz', t: '22:00'},
-      {id: 'g3', h: 'Belçika', a: 'İran', g: 'G', d: '20 Haz', t: '18:00'},
-      {id: 'g4', h: 'Mısır', a: 'Yeni Zelanda', g: 'G', d: '20 Haz', t: '21:00'},
-      {id: 'g5', h: 'Belçika', a: 'Yeni Zelanda', g: 'G', d: '24 Haz', t: '19:00'},
-      {id: 'g6', h: 'İran', a: 'Mısır', g: 'G', d: '24 Haz', t: '19:00'},
-      {id: 'h1', h: 'İspanya', a: 'Yeşil Burun Adaları', g: 'H', d: '14 Haz', t: '14:00'},
-      {id: 'h2', h: 'Suudi Arabistan', a: 'Uruguay', g: 'H', d: '15 Haz', t: '18:00'},
-      {id: 'h3', h: 'İspanya', a: 'Suudi Arabistan', g: 'H', d: '20 Haz', t: '17:00'},
-      {id: 'h4', h: 'Uruguay', a: 'Yeşil Burun Adaları', g: 'H', d: '20 Haz', t: '20:00'},
-      {id: 'h5', h: 'İspanya', a: 'Uruguay', g: 'H', d: '24 Haz', t: '16:00'},
-      {id: 'h6', h: 'Suudi Arabistan', a: 'Yeşil Burun Adaları', g: 'H', d: '24 Haz', t: '16:00'},
-      {id: 'i1', h: 'Fransa', a: 'Senegal', g: 'İ', d: '16 Haz', t: '21:00'},
-      {id: 'i2', h: 'Irak', a: 'Norveç', g: 'İ', d: '16 Haz', t: '16:00'},
-      {id: 'i3', h: 'Fransa', a: 'Irak', g: 'İ', d: '21 Haz', t: '19:00'},
-      {id: 'i4', h: 'Norveç', a: 'Senegal', g: 'İ', d: '21 Haz', t: '22:00'},
-      {id: 'i5', h: 'Fransa', a: 'Norveç', g: 'İ', d: '25 Haz', t: '22:00'},
-      {id: 'i6', h: 'Senegal', a: 'Irak', g: 'İ', d: '25 Haz', t: '22:00'},
-      {id: 'j1', h: 'Arjantin', a: 'Cezayir', g: 'J', d: '16 Haz', t: '18:00'},
-      {id: 'j2', h: 'Avusturya', a: 'Ürdün', g: 'J', d: '16 Haz', t: '22:00'},
-      {id: 'j3', h: 'Arjantin', a: 'Avusturya', g: 'J', d: '21 Haz', t: '17:00'},
-      {id: 'j4', h: 'Cezayir', a: 'Ürdün', g: 'J', d: '21 Haz', t: '20:00'},
-      {id: 'j5', h: 'Arjantin', a: 'Ürdün', g: 'J', d: '25 Haz', t: '19:00'},
-      {id: 'j6', h: 'Cezayir', a: 'Avusturya', g: 'J', d: '25 Haz', t: '19:00'},
-      {id: 'k1', h: 'Portekiz', a: 'Kongo DR', g: 'K', d: '17 Haz', t: '19:00'},
-      {id: 'k2', h: 'Özbekistan', a: 'Kolombiya', g: 'K', d: '17 Haz', t: '22:00'},
-      {id: 'k3', h: 'Portekiz', a: 'Özbekistan', g: 'K', d: '22 Haz', t: '16:00'},
-      {id: 'k4', h: 'Kongo DR', a: 'Kolombiya', g: 'K', d: '22 Haz', t: '21:00'},
-      {id: 'k5', h: 'Portekiz', a: 'Kolombiya', g: 'K', d: '26 Haz', t: '17:00'},
-      {id: 'k6', h: 'Kongo DR', a: 'Özbekistan', g: 'K', d: '26 Haz', t: '17:00'},
-      {id: 'l1', h: 'İngiltere', a: 'Hırvatistan', g: 'L', d: '17 Haz', t: '21:00'},
-      {id: 'l2', h: 'Gana', a: 'Panama', g: 'L', d: '17 Haz', t: '17:00'},
-      {id: 'l3', h: 'İngiltere', a: 'Gana', g: 'L', d: '23 Haz', t: '16:00'},
-      {id: 'l4', h: 'Hırvatistan', a: 'Panama', g: 'L', d: '23 Haz', t: '19:00'},
-      {id: 'l5', h: 'İngiltere', a: 'Panama', g: 'L', d: '27 Haz', t: '22:00'},
-      {id: 'l6', h: 'Hırvatistan', a: 'Gana', g: 'L', d: '27 Haz', t: '22:00'}
-    ];
+const MATCHES = [
+  // === A GRUBU ===
+  {id: 'w26_a1', h: 'Meksika', a: 'Güney Afrika', g: 'A Grubu', d: '2026-06-11', t: '20:00'},
+  {id: 'w26_a2', h: 'Güney Kore', a: 'Çekya', g: 'A Grubu', d: '2026-06-11', t: '23:00'},
+  {id: 'w26_a3', h: 'Meksika', a: 'Güney Kore', g: 'A Grubu', d: '2026-06-15', t: '15:00'},
+  {id: 'w26_a4', h: 'Güney Afrika', a: 'Çekya', g: 'A Grubu', d: '2026-06-15', t: '18:00'},
+  {id: 'w26_a5', h: 'Meksika', a: 'Çekya', g: 'A Grubu', d: '2026-06-19', t: '22:00'},
+  {id: 'w26_a6', h: 'Güney Afrika', a: 'Güney Kore', g: 'A Grubu', d: '2026-06-19', t: '22:00'},
+
+  // === B GRUBU ===
+  {id: 'w26_b1', h: 'Kanada', a: 'Bosna-Hersek', g: 'B Grubu', d: '2026-06-12', t: '19:00'},
+  {id: 'w26_b2', h: 'Katar', a: 'İsviçre', g: 'B Grubu', d: '2026-06-13', t: '18:00'},
+  {id: 'w26_b3', h: 'Kanada', a: 'Katar', g: 'B Grubu', d: '2026-06-17', t: '20:00'},
+  {id: 'w26_b4', h: 'İsviçre', a: 'Bosna-Hersek', g: 'B Grubu', d: '2026-06-17', t: '23:00'},
+  {id: 'w26_b5', h: 'Kanada', a: 'İsviçre', g: 'B Grubu', d: '2026-06-21', t: '22:00'},
+  {id: 'w26_b6', h: 'Bosna-Hersek', a: 'Katar', g: 'B Grubu', d: '2026-06-21', t: '22:00'},
+
+  // === C GRUBU ===
+  {id: 'w26_c2', h: 'Haiti', a: 'İskoçya', g: 'C Grubu', d: '2026-06-13', t: '00:00'},
+  {id: 'w26_c1', h: 'Brezilya', a: 'Fas', g: 'C Grubu', d: '2026-06-13', t: '21:00'},
+  {id: 'w26_c3', h: 'Brezilya', a: 'Haiti', g: 'C Grubu', d: '2026-06-18', t: '16:00'},
+  {id: 'w26_c4', h: 'İskoçya', a: 'Fas', g: 'C Grubu', d: '2026-06-18', t: '22:00'},
+  {id: 'w26_c5', h: 'Brezilya', a: 'İskoçya', g: 'C Grubu', d: '2026-06-22', t: '22:00'},
+  {id: 'w26_c6', h: 'Fas', a: 'Haiti', g: 'C Grubu', d: '2026-06-22', t: '22:00'},
+
+  // === D GRUBU ===
+  {id: 'w26_d1', h: 'ABD', a: 'Paraguay', g: 'D Grubu', d: '2026-06-13', t: '00:00'},
+  {id: 'w26_d2', h: 'Avustralya', a: 'Türkiye', g: 'D Grubu', d: '2026-06-14', t: '07:00'},
+  {id: 'w26_d3', h: 'ABD', a: 'Avustralya', g: 'D Grubu', d: '2026-06-18', t: '19:00'},
+  {id: 'w26_d4', h: 'Türkiye', a: 'Paraguay', g: 'D Grubu', d: '2026-06-19', t: '06:00'},
+  {id: 'w26_d5', h: 'ABD', a: 'Türkiye', g: 'D Grubu', d: '2026-06-26', t: '05:00'},
+  {id: 'w26_d6', h: 'Paraguay', a: 'Avustralya', g: 'D Grubu', d: '2026-06-26', t: '22:00'},
+
+  // === E GRUBU ===
+  {id: 'w26_e1', h: 'Almanya', a: 'Ekvador', g: 'E Grubu', d: '2026-06-14', t: '15:00'},
+  {id: 'w26_e2', h: 'Fildişi Sahili', a: 'Curaçao', g: 'E Grubu', d: '2026-06-14', t: '21:00'},
+  {id: 'w26_e3', h: 'Almanya', a: 'Fildişi Sahili', g: 'E Grubu', d: '2026-06-19', t: '19:00'},
+  {id: 'w26_e4', h: 'Ekvador', a: 'Curaçao', g: 'E Grubu', d: '2026-06-19', t: '22:00'},
+  {id: 'w26_e5', h: 'Almanya', a: 'Curaçao', g: 'E Grubu', d: '2026-06-23', t: '22:00'},
+  {id: 'w26_e6', h: 'Fildişi Sahili', a: 'Ekvador', g: 'E Grubu', d: '2026-06-23', t: '22:00'},
+
+  // === F GRUBU ===
+  {id: 'w26_f1', h: 'Hollanda', a: 'Japonya', g: 'F Grubu', d: '2026-06-14', t: '18:00'},
+  {id: 'w26_f2', h: 'İsveç', a: 'Tunus', g: 'F Grubu', d: '2026-06-15', t: '19:00'},
+  {id: 'w26_f3', h: 'Hollanda', a: 'İsveç', g: 'F Grubu', d: '2026-06-19', t: '18:00'},
+  {id: 'w26_f4', h: 'Japonya', a: 'Tunus', g: 'F Grubu', d: '2026-06-20', t: '22:00'},
+  {id: 'w26_f5', h: 'Hollanda', a: 'Tunus', g: 'F Grubu', d: '2026-06-24', t: '22:00'},
+  {id: 'w26_f6', h: 'Japonya', a: 'İsveç', g: 'F Grubu', d: '2026-06-24', t: '22:00'},
+
+  // === G GRUBU ===
+  {id: 'w26_g1', h: 'Belçika', a: 'Mısır', g: 'G Grubu', d: '2026-06-15', t: '16:00'},
+  {id: 'w26_g2', h: 'İran', a: 'Yeni Zelanda', g: 'G Grubu', d: '2026-06-15', t: '22:00'},
+  {id: 'w26_g3', h: 'Belçika', a: 'İran', g: 'G Grubu', d: '2026-06-20', t: '18:00'},
+  {id: 'w26_g4', h: 'Mısır', a: 'Yeni Zelanda', g: 'G Grubu', d: '2026-06-20', t: '21:00'},
+  {id: 'w26_g5', h: 'Belçika', a: 'Yeni Zelanda', g: 'G Grubu', d: '2026-06-24', t: '19:00'},
+  {id: 'w26_g6', h: 'İran', a: 'Mısır', g: 'G Grubu', d: '2026-06-24', t: '19:00'},
+
+  // === H GRUBU ===
+  {id: 'w26_h1', h: 'İspanya', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-14', t: '14:00'},
+  {id: 'w26_h2', h: 'Suudi Arabistan', a: 'Uruguay', g: 'H Grubu', d: '2026-06-15', t: '18:00'},
+  {id: 'w26_h3', h: 'İspanya', a: 'Suudi Arabistan', g: 'H Grubu', d: '2026-06-20', t: '17:00'},
+  {id: 'w26_h4', h: 'Uruguay', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-20', t: '20:00'},
+  {id: 'w26_h5', h: 'İspanya', a: 'Uruguay', g: 'H Grubu', d: '2026-06-24', t: '16:00'},
+  {id: 'w26_h6', h: 'Suudi Arabistan', a: 'Yeşil Burun Adaları', g: 'H Grubu', d: '2026-06-24', t: '16:00'},
+
+  // === I GRUBU ===
+  {id: 'w26_i2', h: 'Irak', a: 'Norveç', g: 'I Grubu', d: '2026-06-16', t: '16:00'},
+  {id: 'w26_i1', h: 'Fransa', a: 'Senegal', g: 'I Grubu', d: '2026-06-16', t: '21:00'},
+  {id: 'w26_i3', h: 'Fransa', a: 'Irak', g: 'I Grubu', d: '2026-06-21', t: '19:00'},
+  {id: 'w26_i4', h: 'Norveç', a: 'Senegal', g: 'I Grubu', d: '2026-06-21', t: '22:00'},
+  {id: 'w26_i5', h: 'Fransa', a: 'Norveç', g: 'I Grubu', d: '2026-06-25', t: '22:00'},
+  {id: 'w26_i6', h: 'Senegal', a: 'Irak', g: 'I Grubu', d: '2026-06-25', t: '22:00'},
+
+  // === J GRUBU ===
+  {id: 'w26_j1', h: 'Arjantin', a: 'Cezayir', g: 'J Grubu', d: '2026-06-16', t: '18:00'},
+  {id: 'w26_j2', h: 'Avusturya', a: 'Ürdün', g: 'J Grubu', d: '2026-06-16', t: '22:00'},
+  {id: 'w26_j3', h: 'Arjantin', a: 'Avusturya', g: 'J Grubu', d: '2026-06-21', t: '17:00'},
+  {id: 'w26_j4', h: 'Cezayir', a: 'Ürdün', g: 'J Grubu', d: '2026-06-21', t: '20:00'},
+  {id: 'w26_j5', h: 'Arjantin', a: 'Ürdün', g: 'J Grubu', d: '2026-06-25', t: '19:00'},
+  {id: 'w26_j6', h: 'Cezayir', a: 'Avusturya', g: 'J Grubu', d: '2026-06-25', t: '19:00'},
+
+  // === K GRUBU ===
+  {id: 'w26_k1', h: 'Portekiz', a: 'Kongo DR', g: 'K Grubu', d: '2026-06-17', t: '19:00'},
+  {id: 'w26_k2', h: 'Özbekistan', a: 'Kolombiya', g: 'K Grubu', d: '2026-06-17', t: '22:00'},
+  {id: 'w26_k3', h: 'Portekiz', a: 'Özbekistan', g: 'K Grubu', d: '2026-06-22', t: '16:00'},
+  {id: 'w26_k4', h: 'Kongo DR', a: 'Kolombiya', g: 'K Grubu', d: '2026-06-22', t: '21:00'},
+  {id: 'w26_k5', h: 'Portekiz', a: 'Kolombiya', g: 'K Grubu', d: '2026-06-26', t: '17:00'},
+  {id: 'w26_k6', h: 'Kongo DR', a: 'Özbekistan', g: 'K Grubu', d: '2026-06-26', t: '17:00'},
+
+  // === L GRUBU ===
+  {id: 'w26_l2', h: 'Gana', a: 'Panama', g: 'L Grubu', d: '2026-06-17', t: '17:00'},
+  {id: 'w26_l1', h: 'İngiltere', a: 'Hırvatistan', g: 'L Grubu', d: '2026-06-17', t: '21:00'},
+  {id: 'w26_l3', h: 'İngiltere', a: 'Gana', g: 'L Grubu', d: '2026-06-23', t: '16:00'},
+  {id: 'w26_l4', h: 'Hırvatistan', a: 'Panama', g: 'L Grubu', d: '2026-06-23', t: '19:00'},
+  {id: 'w26_l5', h: 'İngiltere', a: 'Panama', g: 'L Grubu', d: '2026-06-27', t: '22:00'},
+  {id: 'w26_l6', h: 'Hırvatistan', a: 'Gana', g: 'L Grubu', d: '2026-06-27', t: '22:00'}
+];
 /* =========================================================
    STATE
    ========================================================= */

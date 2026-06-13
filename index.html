@@ -444,7 +444,7 @@ function evaluatePrediction(pred, result){
   const rh = parseInt(result.hScore), ra = parseInt(result.aScore);
   if(isNaN(ph) || isNaN(pa) || isNaN(rh) || isNaN(ra)) return null;
 
-  if(ph === rh && pa === ra) return {point:3, type:'TS'};
+  if(ph === rh && pa === ra) return {point:2, type:'TS'};
 
   const predDiff = Math.sign(ph - pa);
   const realDiff = Math.sign(rh - ra);

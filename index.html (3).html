@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Turnuva Skor Tahmin Uygulaması</title>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<style>
+:root{
+  --bg:#111827; --card:#1f2937; --border:#374151;
+  --text:#f3f4f6; --muted:#9ca3af; --accent:#3b82f6;
+  --green:#22c55e; --yellow:#eab308; --red:#ef4444;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  background:var(--bg); color:var(--text);
+  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+  padding-bottom:70px;
+}
+.container{max-width:900px; margin:0 auto; padding:10px;}
+header{
+  background:var(--card); padding:14px 16px; text-align:center;
+  border-bottom:1px solid var(--border); position:sticky; top:0; z-index:50;
+}
+header h1{font-size:1.2rem; letter-spacing:1px;}
+.user-bar{
+  display:flex; justify-content:space-between; align-items:center;
+  background:var(--card); border:1px solid var(--border);
+  border-radius:10px; padding:10px 14px; margin:10px 0; font-size:0.9rem;
+}
+.user-bar button{
+  background:var(--red); color:#fff; border:none; padding:6px 12px;
+  border-radius:6px; cursor:pointer; font-size:0.8rem;
+}
+
+/* TABS */
+.tabs{
+  display:flex; position:fixed; bottom:0; left:0; right:0;
+  background:var(--card); border-top:1px solid var(--border);
+  z-index:100; overflow-x:auto;
+}
+.tab-btn{
+  flex:1; min-width:70px; background:none; border:none; color:var(--muted);
+  padding:10px 4px; font-size:0.75rem; cursor:pointer; text-align:center;
+  border-top:3px solid transparent; transition:.2s;
+}
+.tab-btn.active{color:var(--accent); border-top-color:var(--accent);}
+.tab-content{display:none; animation:fade .3s ease;}
+.tab-content.active{display:block;}
+@keyframes fade{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);}}
+
+/* CARDS / GENERAL */
+.card{
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:14px; margin-bottom:14px;
+}
+h2.section-title{font-size:1.1rem; margin-bottom:10px; color:var(--accent);}
+input, button, select{
+  font-family:inherit; border-radius:6px; border:1px solid var(--border);
+  background:#0f1623; color:var(--text); padding:8px; font-size:0.9rem;
+}
+button{cursor:pointer; transition:.2s;}
+button:hover{opacity:.85;}
+.btn-primary{background:var(--accent); color:#fff; border:none; font-weight:600;}
+.btn-danger{background:var(--red); color:#fff; border:none;}
+.btn-small{padding:5px 10px; font-size:0.8rem;}
+
+/* LOGIN */
+#login-screen{
+  display:flex; justify-content:center; align-items:center;
+  min-height:90vh; padding:20px;
+}
+.login-box{
+  background:var(--card); border:1px solid var(--border); border-radius:14px;
+  padding:24px; width:100%; max-width:340px; text-align:center;
+}
+.login-box h2{margin-bottom:14px;}
+.login-box input{width:100%; margin-bottom:10px;}
+.login-box button{width:100%; margin-top:6px; padding:10px;}
+.toggle-link{color:var(--accent); cursor:pointer; font-size:0.85rem; margin-top:10px; display:block;}
+.error-msg{color:var(--red); font-size:0.85rem; min-height:18px; margin-top:6px;}
+
+/* LEADERBOARD TABLE */
+table{width:100%; border-collapse:collapse; font-size:0.85rem;}
+th, td{padding:8px 6px; text-align:center; border-bottom:1px solid var(--border);}
+th{color:var(--muted); font-weight:600; font-size:0.75rem; text-transform:uppercase;}
+td.player-cell{display:flex; align-items:center; gap:8px; text-align:left; min-width:120px;}
+.avatar{
+  width:28px; height:28px; border-radius:50%; display:flex;
+  align-items:center; justify-content:center; font-weight:700; font-size:0.8rem;
+  color:#fff; flex-shrink:0;
+}
+.points{color:var(--green); font-weight:700;}
+.legend{font-size:0.7rem; color:var(--muted); margin-top:8px; line-height:1.5;}
+.rank-num{font-weight:700;}
+
+/* GROUP TABLES */
+.group-block{margin-bottom:18px;}
+.group-block h3{margin-bottom:8px; color:var(--accent); font-size:1rem;}
+.group-table th, .group-table td{padding:6px 4px; font-size:0.8rem;}
+.group-table td:first-child, .group-table th:first-child{text-align:left;}
+
+/* MATCH CARDS */
+.match-date-group{margin-bottom:18px;}
+.match-date-group h3{
+  color:var(--muted); font-size:0.85rem; margin-bottom:8px;
+  border-bottom:1px solid var(--border); padding-bottom:4px;
+}
+.match-card{
+  background:#161f30; border:1px solid var(--border); border-radius:10px;
+  padding:12px; margin-bottom:10px;
+}
+.match-top{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:0.75rem; color:var(--muted); margin-bottom:8px;
+}
+.match-teams{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  font-size:1rem; font-weight:600; margin-bottom:10px;
+}
+.match-teams .vs{color:var(--muted); font-size:0.8rem;}
+.score-inputs{display:flex; align-items:center; justify-content:center; gap:8px;}
+.score-inputs input{width:50px; text-align:center; font-size:1.1rem;}
+.match-actions{display:flex; justify-content:center; margin-top:10px;}
+.result-box{text-align:center; font-size:0.9rem; margin-top:6px;}
+.result-score{
+  font-size:1.4rem; font-weight:800; color:var(--accent);
+}
+.user-point-badge{
+  display:inline-block; margin-top:6px; padding:4px 10px; border-radius:6px;
+  font-weight:700; font-size:0.8rem;
+}
+.badge-3{background:var(--green); color:#063; color:#0a2;}
+.badge-3{background:rgba(34,197,94,.2); color:var(--green); border:1px solid var(--green);}
+.badge-1{background:rgba(234,179,8,.2); color:var(--yellow); border:1px solid var(--yellow);}
+.badge-0{background:rgba(239,68,68,.2); color:var(--red); border:1px solid var(--red);}
+.others-predictions{
+  margin-top:10px; padding-top:8px; border-top:1px dashed var(--border);
+  font-size:0.78rem; color:var(--muted);
+}
+.others-predictions span.pred-item{
+  display:inline-block; background:#0f1623; border-radius:5px;
+  padding:2px 6px; margin:2px; color:var(--text);
+}
+
+/* ADMIN */
+.admin-match-row{
+  display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:8px; padding:8px; border-bottom:1px solid var(--border);
+  font-size:0.85rem;
+}
+.admin-match-row .teams{flex:1; min-width:150px;}
+.admin-score-inputs{display:flex; gap:6px; align-items:center;}
+.admin-score-inputs input{width:45px; text-align:center;}
+.admin-user-row{
+  display:flex; justify-content:space-between; align-items:center;
+  padding:8px; border-bottom:1px solid var(--border); font-size:0.85rem;
+}
+
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+
+<!-- ============== LOGIN SCREEN ============== -->
+<div id="login-screen">
+  <div class="login-box">
+    <h2>⚽ Turnuva Tahmin</h2>
+    <div id="login-form">
+      <input type="text" id="login-name" placeholder="Kullanıcı Adı">
+      <input type="password" id="login-pass" placeholder="Şifre">
+      <button class="btn-primary" onclick="playerLogin()">Giriş Yap</button>
+      <span class="toggle-link" onclick="toggleAuthForm()">Hesabın yok mu? Kayıt Ol</span>
+    </div>
+    <div id="register-form" class="hidden">
+      <input type="text" id="reg-name" placeholder="Kullanıcı Adı">
+      <input type="password" id="reg-pass" placeholder="Şifre">
+      <button class="btn-primary" onclick="registerPlayer()">Kayıt Ol</button>
+      <span class="toggle-link" onclick="toggleAuthForm()">Hesabın var mı? Giriş Yap</span>
+    </div>
+    <div class="error-msg" id="auth-error"></div>
+  </div>
+</div>
+
+<!-- ============== MAIN APP ============== -->
+<div id="app" class="hidden">
+  <header>
+    <h1>🏆 TURNUVA SKOR TAHMİN</h1>
+  </header>
+
+  <div class="container">
+    <div class="user-bar">
+      <span>👤 Hoş geldin, <strong id="current-user-name"></strong></span>
+      <button onclick="logout()">Çıkış</button>
+    </div>
+
+    <!-- SIRALAMA -->
+    <div id="tab-siralama" class="tab-content active">
+      <div class="card">
+        <h2 class="section-title">📊 Genel Sıralama</h2>
+        <div style="overflow-x:auto;">
+          <table id="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Sıra</th>
+                <th style="text-align:left;">Oyuncu</th>
+                <th>P</th>
+                <th>O</th>
+                <th>TS</th>
+                <th>K/B</th>
+                <th>Y</th>
+                <th>AV</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboard-list"></tbody>
+          </table>
+        </div>
+        <div class="legend">
+          P = Puan, O = Oynanan, TS = Tam Skor, K/B = Kazanan/Beraberlik, Y = Yanlış, AV = Puan Ortalaması
+        </div>
+      </div>
+    </div>
+
+    <!-- GRUPLAR -->
+    <div id="tab-gruplar" class="tab-content">
+      <div id="groups-container"></div>
+    </div>
+
+    <!-- MAÇLAR -->
+    <div id="tab-maclar" class="tab-content">
+      <div id="matches-container"></div>
+    </div>
+
+    <!-- SONUÇLAR -->
+    <div id="tab-sonuclar" class="tab-content">
+      <div id="results-container"></div>
+    </div>
+
+    <!-- ADMIN -->
+    <div id="tab-admin" class="tab-content">
+      <div class="card">
+        <h2 class="section-title">⚙️ Maç Sonuçları Yönetimi</h2>
+        <div id="admin-matches-container"></div>
+      </div>
+      <div class="card">
+        <h2 class="section-title">👥 Kullanıcı Yönetimi</h2>
+        <div id="admin-users-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB BAR -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="siralama" onclick="switchTab('siralama')">📊 Sıralama</button>
+    <button class="tab-btn" data-tab="gruplar" onclick="switchTab('gruplar')">🗂️ Gruplar</button>
+    <button class="tab-btn" data-tab="maclar" onclick="switchTab('maclar')">⚽ Maçlar</button>
+    <button class="tab-btn" data-tab="sonuclar" onclick="switchTab('sonuclar')">🏁 Sonuçlar</button>
+    <button class="tab-btn hidden" id="admin-tab-btn" data-tab="admin" onclick="switchTab('admin')">🛠️ Admin</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   FIREBASE CONFIG
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+/* =========================================================
+   STATİK VERİLER
+   ========================================================= */
+const TEAM_FLAGS = {
+  "Türkiye":"🇹🇷","Almanya":"🇩🇪","Fransa":"🇫🇷","İspanya":"🇪🇸",
+  "İtalya":"🇮🇹","Portekiz":"🇵🇹","İngiltere":"🏴","Hollanda":"🇳🇱",
+  "Brezilya":"🇧🇷","Arjantin":"🇦🇷","Hırvatistan":"🇭🇷","Belçika":"🇧🇪",
+  "Japonya":"🇯🇵","ABD":"🇺🇸","Fas":"🇲🇦","Senegal":"🇸🇳",
+  "Polonya":"🇵🇱","Kanada":"🇨🇦","Sırbistan":"🇷🇸","İsviçre":"🇨🇭"
+};
+
+const MATCHES = [
+  {id:"m1", h:"Türkiye", a:"İtalya", g:"A Grubu", d:"2026-06-15", t:"21:00"},
+  {id:"m2", h:"Almanya", a:"İspanya", g:"A Grubu", d:"2026-06-15", t:"18:00"},
+  {id:"m3", h:"Fransa", a:"Hollanda", g:"B Grubu", d:"2026-06-16", t:"21:00"},
+  {id:"m4", h:"Portekiz", a:"Belçika", g:"B Grubu", d:"2026-06-16", t:"18:00"},
+  {id:"m5", h:"Brezilya", a:"Hırvatistan", g:"C Grubu", d:"2026-06-17", t:"21:00"},
+  {id:"m6", h:"Arjantin", a:"Polonya", g:"C Grubu", d:"2026-06-17", t:"18:00"},
+  {id:"m7", h:"İngiltere", a:"ABD", g:"D Grubu", d:"2026-06-18", t:"21:00"},
+  {id:"m8", h:"Japonya", a:"İsviçre", g:"D Grubu", d:"2026-06-18", t:"18:00"},
+  {id:"m9", h:"Türkiye", a:"Almanya", g:"A Grubu", d:"2026-06-20", t:"21:00"},
+  {id:"m10", h:"İtalya", a:"İspanya", g:"A Grubu", d:"2026-06-20", t:"18:00"},
+  {id:"m11", h:"Fas", a:"Senegal", g:"E Grubu", d:"2026-06-21", t:"21:00"},
+  {id:"m12", h:"Sırbistan", a:"Kanada", g:"E Grubu", d:"2026-06-21", t:"18:00"}
+];
+
+/* =========================================================
+   STATE
+   ========================================================= */
+let CURRENT_UID = null;
+let CURRENT_NAME = null;
+let IS_ADMIN = false;
+
+let USERS = {};
+let PREDICTIONS = {};
+let RESULTS = {};
+
+/* =========================================================
+   YARDIMCI FONKSİYONLAR
+   ========================================================= */
+function generateUID(){
+  return 'u_' + Date.now().toString(36) + Math.random().toString(36).substr(2,9);
+}
+
+function getInitialColor(name){
+  const colors = ['#3b82f6','#ef4444','#22c55e','#eab308','#a855f7','#06b6d4','#f97316','#ec4899'];
+  let sum = 0;
+  for(let i=0;i<name.length;i++) sum += name.charCodeAt(i);
+  return colors[sum % colors.length];
+}
+
+function flag(team){
+  return TEAM_FLAGS[team] || "🏳️";
+}
+
+function isAdminName(name){
+  return (name || '').trim().toLowerCase() === 'admin';
+}
+
+/* Bir tahmin ile gerçek sonuca göre puan hesaplar -> {point, type} type: 'TS','KB','Y' */
+function evaluatePrediction(pred, result){
+  if(!pred || !result) return null;
+  const ph = parseInt(pred.hScore), pa = parseInt(pred.aScore);
+  const rh = parseInt(result.hScore), ra = parseInt(result.aScore);
+  if(isNaN(ph) || isNaN(pa) || isNaN(rh) || isNaN(ra)) return null;
+
+  if(ph === rh && pa === ra) return {point:3, type:'TS'};
+
+  const predDiff = Math.sign(ph - pa);
+  const realDiff = Math.sign(rh - ra);
+  if(predDiff === realDiff) return {point:1, type:'KB'};
+
+  return {point:0, type:'Y'};
+}
+
+/* =========================================================
+   AUTH
+   ========================================================= */
+function toggleAuthForm(){
+  document.getElementById('login-form').classList.toggle('hidden');
+  document.getElementById('register-form').classList.toggle('hidden');
+  document.getElementById('auth-error').textContent = '';
+}
+
+function registerPlayer(){
+  const name = document.getElementById('reg-name').value.trim();
+  const pass = document.getElementById('reg-pass').value.trim();
+  const errEl = document.getElementById('auth-error');
+
+  if(!name || !pass){
+    errEl.textContent = 'Lütfen kullanıcı adı ve şifre girin.';
+    return;
+  }
+
+  db.ref('users').once('value').then(snap => {
+    const users = snap.val() || {};
+    const exists = Object.values(users).some(u => (u.name||'').toLowerCase() === name.toLowerCase());
+    if(exists){
+      errEl.textContent = 'Bu kullanıcı adı zaten kayıtlı.';
+      return;
+    }
+    const uid = generateUID();
+    db.ref('users/' + uid).set({name: name, pass: pass}).then(() => {
+      finalizeLogin(uid, name);
+    });
+  });
+}
+
+function playerLogin(){
+  const name = document.getElementById('login-name').value.trim();
+  const pass = document.getElementById('login-pass').value.trim();
+  const errEl = document.getElementById('auth-error');
+
+  if(!name || !pass){
+    errEl.textContent = 'Lütfen kullanıcı adı ve şifre girin.';
+    return;
+  }
+
+  db.ref('users').once('value').then(snap => {
+    const users = snap.val() || {};
+    let foundUid = null, foundUser = null;
+    for(const [uid, u] of Object.entries(users)){
+      if((u.name||'').toLowerCase() === name.toLowerCase()){
+        foundUid = uid; foundUser = u; break;
+      }
+    }
+    if(!foundUser){
+      errEl.textContent = 'Kullanıcı bulunamadı. Kayıt olmayı deneyin.';
+      return;
+    }
+    if(foundUser.pass !== pass){
+      errEl.textContent = 'Şifre hatalı.';
+      return;
+    }
+    finalizeLogin(foundUid, foundUser.name);
+  });
+}
+
+function finalizeLogin(uid, name){
+  CURRENT_UID = uid;
+  CURRENT_NAME = name;
+  IS_ADMIN = isAdminName(name);
+
+  localStorage.setItem('tahmin_uid', uid);
+  localStorage.setItem('tahmin_name', name);
+
+  document.getElementById('login-screen').classList.add('hidden');
+  document.getElementById('app').classList.remove('hidden');
+  document.getElementById('current-user-name').textContent = name;
+
+  if(IS_ADMIN){
+    document.getElementById('admin-tab-btn').classList.remove('hidden');
+  } else {
+    document.getElementById('admin-tab-btn').classList.add('hidden');
+  }
+
+  loadData();
+}
+
+function logout(){
+  CURRENT_UID = null; CURRENT_NAME = null; IS_ADMIN = false;
+  localStorage.removeItem('tahmin_uid');
+  localStorage.removeItem('tahmin_name');
+  document.getElementById('app').classList.add('hidden');
+  document.getElementById('login-screen').classList.remove('hidden');
+  document.getElementById('login-name').value = '';
+  document.getElementById('login-pass').value = '';
+}
+
+/* Sayfa açılışında oturum kontrolü */
+window.addEventListener('load', () => {
+  const savedUid = localStorage.getItem('tahmin_uid');
+  const savedName = localStorage.getItem('tahmin_name');
+  if(savedUid && savedName){
+    db.ref('users/' + savedUid).once('value').then(snap => {
+      if(snap.exists()){
+        finalizeLogin(savedUid, snap.val().name);
+      } else {
+        logout();
+      }
+    });
+  }
+});
+
+/* =========================================================
+   TAB GEÇİŞİ
+   ========================================================= */
+function switchTab(tabName){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+  document.getElementById('tab-' + tabName).classList.add('active');
+  document.querySelector('.tab-btn[data-tab="' + tabName + '"]').classList.add('active');
+}
+
+/* =========================================================
+   FIREBASE - VERİ DİNLEME
+   ========================================================= */
+function loadData(){
+  db.ref('users').on('value', snap => {
+    USERS = snap.val() || {};
+    refreshAll();
+  });
+  db.ref('predictions').on('value', snap => {
+    PREDICTIONS = snap.val() || {};
+    refreshAll();
+  });
+  db.ref('results').on('value', snap => {
+    RESULTS = snap.val() || {};
+    refreshAll();
+  });
+}
+
+function refreshAll(){
+  calculateLeaderboard();
+  renderGroups();
+  renderMatches();
+  renderResults();
+  if(IS_ADMIN) renderAdminPanel();
+}
+
+/* =========================================================
+   SIRALAMA TABLOSU (LEADERBOARD)
+   ========================================================= */
+function calculateLeaderboard(){
+  const tbody = document.getElementById('leaderboard-list');
+  tbody.innerHTML = '';
+
+  const stats = [];
+
+  for(const [uid, user] of Object.entries(USERS)){
+    if(isAdminName(user.name)) continue; // Admin sıralamaya dahil edilmez
+
+    let P = 0, O = 0, TS = 0, KB = 0, Y = 0;
+    const userPreds = PREDICTIONS[uid] || {};
+
+    for(const [matchId, pred] of Object.entries(userPreds)){
+      const result = RESULTS[matchId];
+      if(!result) continue; // sonuç girilmemiş maçlar sayılmaz
+      const evalRes = evaluatePrediction(pred, result);
+      if(!evalRes) continue;
+
+      O++;
+      P += evalRes.point;
+      if(evalRes.type === 'TS') TS++;
+      else if(evalRes.type === 'KB') KB++;
+      else Y++;
+    }
+
+    const AV = O > 0 ? (P / O) : 0;
+
+    stats.push({uid, name: user.name, P, O, TS, KB, Y, AV});
+  }
+
+  // Sıralama: önce Puan, sonra Tam Skor
+  stats.sort((a, b) => {
+    if(b.P !== a.P) return b.P - a.P;
+    return b.TS - a.TS;
+  });
+
+  const medals = ['🥇','🥈','🥉'];
+
+  stats.forEach((s, index) => {
+    const tr = document.createElement('tr');
+    const rankDisplay = medals[index] ? medals[index] + ' ' + (index+1) : (index+1);
+    const initial = (s.name || '?').charAt(0).toUpperCase();
+    const avatarColor = getInitialColor(s.name || '');
+
+    tr.innerHTML = `
+      <td class="rank-num">${rankDisplay}</td>
+      <td class="player-cell">
+        <div class="avatar" style="background:${avatarColor}">${initial}</div>
+        <span>${s.name}</span>
+      </td>
+      <td class="points">${s.P}</td>
+      <td>${s.O}</td>
+      <td>${s.TS}</td>
+      <td>${s.KB}</td>
+      <td>${s.Y}</td>
+      <td>${s.AV.toFixed(2)}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  if(stats.length === 0){
+    tbody.innerHTML = '<tr><td colspan="8" style="color:var(--muted); padding:16px;">Henüz oyuncu bulunmuyor.</td></tr>';
+  }
+}
+
+/* =========================================================
+   GRUPLAR
+   ========================================================= */
+function renderGroups(){
+  const container = document.getElementById('groups-container');
+  container.innerHTML = '';
+
+  // Grupları ve takımları topla
+  const groups = {}; // {groupName: {teamName: stats}}
+
+  MATCHES.forEach(m => {
+    if(!groups[m.g]) groups[m.g] = {};
+    if(!groups[m.g][m.h]) groups[m.g][m.h] = newTeamStat(m.h);
+    if(!groups[m.g][m.a]) groups[m.g][m.a] = newTeamStat(m.a);
+  });
+
+  // Sonuçlara göre istatistikleri hesapla
+  MATCHES.forEach(m => {
+    const result = RESULTS[m.id];
+    if(!result) return;
+    const hs = parseInt(result.hScore), as = parseInt(result.aScore);
+    if(isNaN(hs) || isNaN(as)) return;
+
+    const home = groups[m.g][m.h];
+    const away = groups[m.g][m.a];
+
+    home.O++; away.O++;
+    home.GF += hs; home.GA += as;
+    away.GF += as; away.GA += hs;
+
+    if(hs > as){ home.G++; home.P += 3; away.M++; }
+    else if(hs < as){ away.G++; away.P += 3; home.M++; }
+    else { home.B++; away.B++; home.P += 1; away.P += 1; }
+  });
+
+  Object.keys(groups).sort().forEach(groupName => {
+    const teams = Object.values(groups[groupName]);
+    teams.forEach(t => t.AV = t.GF - t.GA);
+    teams.sort((a,b) => {
+      if(b.P !== a.P) return b.P - a.P;
+      if(b.AV !== a.AV) return b.AV - a.AV;
+      return b.GF - a.GF;
+    });
+
+    const block = document.createElement('div');
+    block.className = 'group-block card';
+    let rows = '';
+    teams.forEach(t => {
+      rows += `
+        <tr>
+          <td>${flag(t.name)} ${t.name}</td>
+          <td>${t.O}</td>
+          <td>${t.G}</td>
+          <td>${t.B}</td>
+          <td>${t.M}</td>
+          <td>${t.AV > 0 ? '+'+t.AV : t.AV}</td>
+          <td class="points">${t.P}</td>
+        </tr>
+      `;
+    });
+
+    block.innerHTML = `
+      <h3>${groupName}</h3>
+      <div style="overflow-x:auto;">
+        <table class="group-table">
+          <thead>
+            <tr>
+              <th>Takım</th><th>O</th><th>G</th><th>B</th><th>M</th><th>AV</th><th>P</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      </div>
+    `;
+    container.appendChild(block);
+  });
+}
+
+function newTeamStat(name){
+  return {name, O:0, G:0, B:0, M:0, GF:0, GA:0, AV:0, P:0};
+}
+
+/* =========================================================
+   MAÇLAR
+   ========================================================= */
+function renderMatches(){
+  const container = document.getElementById('matches-container');
+  container.innerHTML = '';
+
+  // Tarihe göre grupla
+  const byDate = {};
+  MATCHES.forEach(m => {
+    if(!byDate[m.d]) byDate[m.d] = [];
+    byDate[m.d].push(m);
+  });
+
+  Object.keys(byDate).sort().forEach(date => {
+    const dateBlock = document.createElement('div');
+    dateBlock.className = 'match-date-group';
+    const dateLabel = formatDate(date);
+    dateBlock.innerHTML = `<h3>📅 ${dateLabel}</h3>`;
+
+    byDate[date].forEach(m => {
+      dateBlock.appendChild(buildMatchCard(m));
+    });
+
+    container.appendChild(dateBlock);
+  });
+}
+
+function formatDate(dateStr){
+  const d = new Date(dateStr + 'T00:00:00');
+  const days = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+  return d.toLocaleDateString('tr-TR', {day:'2-digit', month:'long', year:'numeric'}) + ' - ' + days[d.getDay()];
+}
+
+function buildMatchCard(m){
+  const card = document.createElement('div');
+  card.className = 'match-card';
+
+  const result = RESULTS[m.id];
+  const myPred = (PREDICTIONS[CURRENT_UID] && PREDICTIONS[CURRENT_UID][m.id]) || null;
+
+  let bodyHtml = '';
+
+  if(!result){
+    // Sonuç yok -> tahmin formu
+    const hVal = myPred ? myPred.hScore : '';
+    const aVal = myPred ? myPred.aScore : '';
+    bodyHtml = `
+      <div class="score-inputs">
+        <input type="number" min="0" id="pred-h-${m.id}" value="${hVal}" placeholder="0">
+        <span class="vs">:</span>
+        <input type="number" min="0" id="pred-a-${m.id}" value="${aVal}" placeholder="0">
+      </div>
+      <div class="match-actions">
+        <button class="btn-primary btn-small" onclick="savePrediction('${m.id}')">Kaydet</button>
+      </div>
+    `;
+  } else {
+    // Sonuç var -> göster + puan
+    bodyHtml = `<div class="result-box">
+      <span class="result-score">${result.hScore} : ${result.aScore}</span>
+    `;
+    if(myPred){
+      const ev = evaluatePrediction(myPred, result);
+      if(ev){
+        const badgeClass = ev.type === 'TS' ? 'badge-3' : (ev.type === 'KB' ? 'badge-1' : 'badge-0');
+        const label = ev.type === 'TS' ? 'Tam Skor! +3 Puan' : (ev.type === 'KB' ? 'Kazanan/Beraberlik! +1 Puan' : 'Yanlış Tahmin (0 Puan)');
+        bodyHtml += `<br><span class="user-point-badge ${badgeClass}">Senin tahminin: ${myPred.hScore}:${myPred.aScore} — ${label}</span>`;
+      }
+    } else {
+      bodyHtml += `<br><span style="color:var(--muted); font-size:0.8rem;">Tahmin yapılmamış</span>`;
+    }
+    bodyHtml += `</div>`;
+  }
+
+  // Diğer oyuncuların tahminleri
+  let othersHtml = '<div class="others-predictions"><strong>Diğer Tahminler:</strong><br>';
+  let hasOthers = false;
+  for(const [uid, user] of Object.entries(USERS)){
+    if(uid === CURRENT_UID) continue;
+    if(isAdminName(user.name)) continue;
+    const p = PREDICTIONS[uid] && PREDICTIONS[uid][m.id];
+    if(p){
+      hasOthers = true;
+      othersHtml += `<span class="pred-item">${user.name}: ${p.hScore}:${p.aScore}</span>`;
+    }
+  }
+  othersHtml += '</div>';
+  if(!hasOthers) othersHtml = '';
+
+  card.innerHTML = `
+    <div class="match-top">
+      <span>${m.g}</span>
+      <span>${m.t}</span>
+    </div>
+    <div class="match-teams">
+      <span>${flag(m.h)} ${m.h}</span>
+      <span class="vs">vs</span>
+      <span>${m.a} ${flag(m.a)}</span>
+    </div>
+    ${bodyHtml}
+    ${othersHtml}
+  `;
+
+  return card;
+}
+
+function savePrediction(matchId){
+  const h = document.getElementById('pred-h-' + matchId).value;
+  const a = document.getElementById('pred-a-' + matchId).value;
+
+  if(h === '' || a === '' || h < 0 || a < 0){
+    alert('Lütfen geçerli bir skor girin.');
+    return;
+  }
+
+  db.ref('predictions/' + CURRENT_UID + '/' + matchId).set({
+    hScore: h,
+    aScore: a
+  });
+}
+
+/* =========================================================
+   SONUÇLAR SEKMESİ
+   ========================================================= */
+function renderResults(){
+  const container = document.getElementById('results-container');
+  container.innerHTML = '';
+
+  const playedMatches = MATCHES.filter(m => RESULTS[m.id]);
+
+  if(playedMatches.length === 0){
+    container.innerHTML = '<div class="card" style="text-align:center; color:var(--muted);">Henüz oynanmış maç bulunmuyor.</div>';
+    return;
+  }
+
+  playedMatches.forEach(m => {
+    const result = RESULTS[m.id];
+    const card = document.createElement('div');
+    card.className = 'match-card';
+
+    let predsHtml = '<div class="others-predictions"><strong>Tahminler ve Puanlar:</strong><br>';
+    let any = false;
+    for(const [uid, user] of Object.entries(USERS)){
+      if(isAdminName(user.name)) continue;
+      const p = PREDICTIONS[uid] && PREDICTIONS[uid][m.id];
+      if(p){
+        any = true;
+        const ev = evaluatePrediction(p, result);
+        const pts = ev ? ev.point : 0;
+        predsHtml += `<span class="pred-item">${user.name}: ${p.hScore}:${p.aScore} (${pts} puan)</span>`;
+      }
+    }
+    predsHtml += '</div>';
+    if(!any) predsHtml = '<div class="others-predictions" style="color:var(--muted);">Bu maça hiç tahmin yapılmamış.</div>';
+
+    card.innerHTML = `
+      <div class="match-top">
+        <span>${m.g}</span>
+        <span>${formatDate(m.d)}</span>
+      </div>
+      <div class="match-teams">
+        <span>${flag(m.h)} ${m.h}</span>
+        <span class="vs">vs</span>
+        <span>${m.a} ${flag(m.a)}</span>
+      </div>
+      <div class="result-box">
+        <span class="result-score">${result.hScore} : ${result.aScore}</span>
+      </div>
+      ${predsHtml}
+    `;
+    container.appendChild(card);
+  });
+}
+
+/* =========================================================
+   ADMIN PANELİ
+   ========================================================= */
+function renderAdminPanel(){
+  // --- Maç sonuçları ---
+  const matchContainer = document.getElementById('admin-matches-container');
+  matchContainer.innerHTML = '';
+
+  MATCHES.forEach(m => {
+    const result = RESULTS[m.id] || {};
+    const row = document.createElement('div');
+    row.className = 'admin-match-row';
+    row.innerHTML = `
+      <div class="teams">${flag(m.h)} ${m.h} vs ${m.a} ${flag(m.a)} <br><small style="color:var(--muted)">${m.g} - ${formatDate(m.d)}</small></div>
+      <div class="admin-score-inputs">
+        <input type="number" min="0" id="admin-h-${m.id}" value="${result.hScore !== undefined ? result.hScore : ''}" placeholder="0">
+        <span>:</span>
+        <input type="number" min="0" id="admin-a-${m.id}" value="${result.aScore !== undefined ? result.aScore : ''}" placeholder="0">
+        <button class="btn-primary btn-small" onclick="adminSaveResult('${m.id}')">Kaydet</button>
+        <button class="btn-danger btn-small" onclick="adminDeleteResult('${m.id}')">Sil</button>
+      </div>
+    `;
+    matchContainer.appendChild(row);
+  });
+
+  // --- Kullanıcı yönetimi ---
+  const userContainer = document.getElementById('admin-users-container');
+  userContainer.innerHTML = '';
+
+  const playerUsers = Object.entries(USERS).filter(([uid, u]) => !isAdminName(u.name));
+
+  if(playerUsers.length === 0){
+    userContainer.innerHTML = '<div style="color:var(--muted); padding:8px;">Henüz kayıtlı oyuncu yok.</div>';
+    return;
+  }
+
+  playerUsers.forEach(([uid, u]) => {
+    const row = document.createElement('div');
+    row.className = 'admin-user-row';
+    row.innerHTML = `
+      <span>👤 ${u.name}</span>
+      <button class="btn-danger btn-small" onclick="adminDeleteUser('${uid}', '${u.name.replace(/'/g, "\\'")}')">Sil</button>
+    `;
+    userContainer.appendChild(row);
+  });
+}
+
+function adminSaveResult(matchId){
+  const h = document.getElementById('admin-h-' + matchId).value;
+  const a = document.getElementById('admin-a-' + matchId).value;
+
+  if(h === '' || a === '' || h < 0 || a < 0){
+    alert('Lütfen geçerli bir skor girin.');
+    return;
+  }
+
+  db.ref('results/' + matchId).set({
+    hScore: h,
+    aScore: a
+  });
+}
+
+function adminDeleteResult(matchId){
+  if(!confirm('Bu maçın sonucunu silmek istediğinize emin misiniz?')) return;
+  db.ref('results/' + matchId).remove();
+}
+
+function adminDeleteUser(uid, name){
+  if(!confirm(`"${name}" kullanıcısını ve tüm tahminlerini silmek istediğinize emin misiniz?`)) return;
+
+  db.ref('users/' + uid).remove();
+  db.ref('predictions/' + uid).remove();
+}
+</script>
+</body>
+</html>

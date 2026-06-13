@@ -814,9 +814,9 @@ function buildMatchCard(m){
     if(myPred){
       const ev = evaluatePrediction(myPred, result);
       if(ev){
-        const badgeClass = ev.type === 'TS' ? 'badge-3' : (ev.type === 'KB' ? 'badge-1' : 'badge-0');
-        const label = ev.type === 'TS' ? 'Tam Skor! +3 Puan' : (ev.type === 'KB' ? 'Kazanan/Beraberlik! +1 Puan' : 'Yanlış Tahmin (0 Puan)');
-        bodyHtml += `<br><span class="user-point-badge ${badgeClass}">Senin tahminin: ${myPred.hScore}:${myPred.aScore} — ${label}</span>`;
+      const badgeClass = ev.type === 'TS' ? 'badge-2' : (ev.type === 'KB' ? 'badge-1' : 'badge-0');
+const label = ev.type === 'TS' ? 'Tam Skor! +2 Puan' : (ev.type === 'KB' ? 'Kazanan/Beraberlik! +1 Puan' : 'Yanlış Tahmin (0 Puan)');
+bodyHtml += `<br><span class="user-point-badge ${badgeClass}">Senin tahminin: ${myPred.hScore}:${myPred.aScore} – ${label}</span>`;
       }
     } else {
       bodyHtml += `<br><span style="color:var(--muted); font-size:0.8rem;">Tahmin yapılmamış</span>`;

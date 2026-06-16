@@ -871,6 +871,24 @@ function savePrediction(matchId){
   });
 }
 
+  function deletePrediction(matchId) {
+  if (!confirm('Bu maça yaptığın tahmini silmek istediğine emin misin?')) return;
+
+  db.ref('predictions/' + CURRENT_UID + '/' + matchId).remove()
+    .then(() => {
+      const hScoreInput = document.getElementById('pred-h-' + matchId);
+      const aScoreInput = document.getElementById('pred-a-' + matchId);
+      
+      if (hScoreInput && aScoreInput) {
+        hScoreInput.value = '';
+        aScoreInput.value = '';
+      }
+      alert('Tahmininiz başarıyla silindi!');
+    })
+    .catch((error) => {
+      alert('Tahmin silinirken bir hata oluştu: ' + error.message);
+    });
+}
 /* =========================================================
    SONUÇLAR SEKMESİ
    ========================================================= */

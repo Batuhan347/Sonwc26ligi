@@ -794,41 +794,43 @@ function buildMatchCard(m){
 
 if(!result){
     // Sonuç yok -> tahmin formu
-    const hVal = myPred ? myPred.hScore : '';
-    const aVal = myPred ? myPred.aScore : '';
-    
-    // Eğer kullanıcının önceden yaptığı bir tahmin varsa "Sil" butonunu göster
-    const deleteButtonHtml = myPred 
-      ? `<button class="btn-danger btn-small" style="margin-left: 8px;" onclick="deletePrediction('${m.id}')">Sil</button>` 
+    const hval = myPred ? myPred.hscore : '';
+    const aval = myPred ? myPred.ascore : '';
+
+    // Eğer kullanıcının önceden yaptığı bir tahmin varsa "sil" butonunu göster
+    const deleteButtonHtml = myPred
+      ? `<button class="btn-danger btn-small" style="margin-left: 8px;" onclick="deletePrediction('${m.id}')">Sil</button>`
       : '';
 
     bodyHtml = `
       <div class="score-inputs">
-        <input type="number" min="0" id="pred-h-${m.id}" value="${hVal}" placeholder="0">
+        <input type="number" min="0" id="pred-h-${m.id}" value="${hval}" placeholder="0">
         <span class="vs">:</span>
-        <input type="number" min="0" id="pred-a-${m.id}" value="${aVal}" placeholder="0">
+        <input type="number" min="0" id="pred-a-${m.id}" value="${aval}" placeholder="0">
       </div>
       <div class="match-actions">
         <button class="btn-primary btn-small" onclick="savePrediction('${m.id}')">Kaydet</button>
         ${deleteButtonHtml}
       </div>
     `;
-  }
   } else {
     // Sonuç var -> göster + puan
-    bodyHtml = `<div class="result-box">
-      <span class="result-score">${result.hScore} : ${result.aScore}</span>
+    bodyHtml = `
+      <div class="result-box">
+        <span class="result-score">${result.hScore} : ${result.aScore}</span>
     `;
+
     if(myPred){
       const ev = evaluatePrediction(myPred, result);
       if(ev){
-      const badgeClass = ev.type === 'TS' ? 'badge-2' : (ev.type === 'KB' ? 'badge-1' : 'badge-0');
-const label = ev.type === 'TS' ? 'Tam Skor! +2 Puan' : (ev.type === 'KB' ? 'Kazanan/Beraberlik! +1 Puan' : 'Yanlış Tahmin (0 Puan)');
-bodyHtml += `<br><span class="user-point-badge ${badgeClass}">Senin tahminin: ${myPred.hScore}:${myPred.aScore} – ${label}</span>`;
+        const badgeClass = ev.type === 'TS' ? 'badge-2' : (ev.type === 'KB' ? 'badge-1' : 'badge-0');
+        const label = ev.type === 'TS' ? 'Tam Skor! +2 Puan' : (ev.type === 'KB' ? 'Kazanan/Beraberlik! +1 Puan' : 'Yanlış Tahmin (0 Puan)');
+        bodyHtml += `<br><span class="user-point-badge ${badgeClass}">Senin tahminin: ${myPred.hscore}:${myPred.ascore} - ${label}</span>`;
       }
     } else {
       bodyHtml += `<br><span style="color:var(--muted); font-size:0.8rem;">Tahmin yapılmamış</span>`;
     }
+
     bodyHtml += `</div>`;
   }
 

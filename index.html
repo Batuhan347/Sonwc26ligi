@@ -794,8 +794,8 @@ function buildMatchCard(m){
 
 if(!result){
     // Sonuç yok -> tahmin formu
-    const hval = myPred ? myPred.hscore : '';
-    const aval = myPred ? myPred.ascore : '';
+    const hval = myPred ? myPred.hScore : '';
+    const aval = myPred ? myPred.aScore : '';
 
     // Eğer kullanıcının önceden yaptığı bir tahmin varsa "sil" butonunu göster
     const deleteButtonHtml = myPred
@@ -825,7 +825,8 @@ if(!result){
       if(ev){
         const badgeClass = ev.type === 'TS' ? 'badge-2' : (ev.type === 'KB' ? 'badge-1' : 'badge-0');
         const label = ev.type === 'TS' ? 'Tam Skor! +2 Puan' : (ev.type === 'KB' ? 'Kazanan/Beraberlik! +1 Puan' : 'Yanlış Tahmin (0 Puan)');
-        bodyHtml += `<br><span class="user-point-badge ${badgeClass}">Senin tahminin: ${myPred.hscore}:${myPred.ascore} - ${label}</span>`;
+        // BURASI DÜZELTİLDİ: hscore -> hScore | ascore -> aScore
+        bodyHtml += `<br><span class="user-point-badge ${badgeClass}">Senin tahminin: ${myPred.hScore}:${myPred.aScore} - ${label}</span>`;
       }
     } else {
       bodyHtml += `<br><span style="color:var(--muted); font-size:0.8rem;">Tahmin yapılmamış</span>`;
